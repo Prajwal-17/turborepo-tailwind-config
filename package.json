@@ -1,5 +1,5 @@
 {
-  "name": "ts&tailwind-config",
+  "name": "ts-tailwind-config",
   "private": true,
   "scripts": {
     "build": "turbo build",

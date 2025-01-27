@@ -1,84 +1,55 @@
-# Turborepo starter
+# To add tailwind to packages
 
-This Turborepo starter is maintained by the Turborepo core team.
+1.  Initialize a turborepo project using `npx create-turbo@latest`
 
-## Using this example
+2.  Add a tailwind.config folder in packages folder.
 
-Run the following command:
+3.  Add a package.json and update its name to `@repo/tailwind-config` and the main to `tailwind.config.js`
 
-```sh
-npx create-turbo@latest
-```
+    - Where main represents the main entry of the file eg: index.js
 
-## What's inside?
+4.  Install `tailwindcss autoprefixer postcss` and run `pnpm exec tailwindcss init -p`
 
-This Turborepo includes the following packages/apps:
+    - update the tailwind config according the apps
 
-### Apps and Packages
+    ```
+    /** @type {import('tailwindcss').Config} */
+    module.exports = {
+      content: [],
+      theme: {
+        extend: {},
+      },
+      plugins: [],
+    }
+    ```
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+5.  Then run this cmd  
+    **when running from the root folder** =>
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+          pnpm install @repo/tailwind-config@ --filter=web
 
-### Utilities
+    **when running from the apps/web folder** =>
 
-This Turborepo has some additional tools already setup for you:
+            pnpm add @repo/tailwind-config --workspace
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+    `@workspace:*` to use the local version of package available in the workspace(root) and from npm  
+     `--filter-web` flag to install the package in a particular app
 
-### Build
+6.  Then add `pnpm add tailwindcss postcss autoprefixer -D
+`  
+     Update the tailwind.config and postcss and global.css
 
-To build all apps and packages, run the following command:
+                import tailwindConfig from '@repo/tailwind-config';
 
-```
-cd my-turborepo
-pnpm build
-```
+                const config = {
+                  ...tailwindConfig,
+                  content: [
+                    "./pages/**/*.{js,ts,jsx,tsx}",
+                    "./components/**/*.{js,ts,jsx,tsx}",
+                    "./app/**/*.{js,ts,jsx,tsx}",
+                    ],
+                };
 
-### Develop
+                export default config;
 
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm dev
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+7.  Then `pnpm run dev` if doesnt work then remove pnpm-lock.yaml file and `pnpm install`
